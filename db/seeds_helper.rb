@@ -128,6 +128,8 @@ return final_haunt_hash
 
 
 
+
+
 # bars_array.each do | bar |
 
 #   this_bar = Bar.find_or_create_by(
