@@ -116,13 +116,13 @@ def response_choices
   def launch_type_of_haunting_menu(type_of_haunting_choice)
       case type_of_haunting_choice
       when 0
-        visual_haunting_printer(Description.visual_haunting_array) #need to be able to use key words from array to search through descriptions and return :name :location: and full description.
+        visual_haunting_printer(Paranormal_Experience.visual_haunting) #need to be able to use key words from array to search through descriptions and return :name :location: and full description.
         launch_first_menu
       when 1
-        auditory_haunting_printer(Description.auditory_haunting_array)
+        auditory_haunting_printer(Paranormal_Experience.auditory_haunting)
         launch_first_menu
       when 2
-        physical_haunting_printer(Description.physical_haunting_array)
+        physical_haunting_printer(Paranormal_Experience.physical_haunting)
         launch_first_menu
       when 3
         launch_first_menu
@@ -148,7 +148,7 @@ def response_choices
       review_printer(message)
     end
   end
-  
+
   def review_printer(message)
     next_or_back = $prompt.select(message, response_choices[:next_or_back_choices])
     if next_or_back == "Back"
