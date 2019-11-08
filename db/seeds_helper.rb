@@ -89,17 +89,17 @@ def haunt_hasher(state_href) # creates a hash of every haunt in a state
   info.each do |haunt|
         if haunt.length == 3
           if !haunt_hash[state]
-              haunt_hash[state] = [{ :name => haunt[0], :city => haunt[1], :state => haunt[2], :description => about[info.index(haunt)] }]
+              haunt_hash[state] = [{ :name => haunt[0].to_s, :city => haunt[1].to_s, :state => haunt[2].to_s, :description => about[info.index(haunt)].to_s }]
             
           else
-              haunt_hash[state] << { :name => haunt[0], :city => haunt[1], :state => haunt[2], :description => about[info.index(haunt)] }
+              haunt_hash[state] << { :name => haunt[0].to_s, :city => haunt[1].to_s, :state => haunt[2].to_s, :description => about[info.index(haunt)].to_s }
             
           end
         else
           if !haunt_hash[state]
-              haunt_hash[state] = [{ :name => haunt[0], :city => haunt[1], :state => state, :description => about[info.index(haunt)] }]
+              haunt_hash[state] = [{ :name => haunt[0].to_s, :city => haunt[1].to_s, :state => state.to_s, :description => about[info.index(haunt)].to_s }]
           else
-              haunt_hash[state] << { :name => haunt[0], :city => haunt[1], :state => state, :description => about[info.index(haunt)] }
+              haunt_hash[state] << { :name => haunt[0].to_s, :city => haunt[1].to_s, :state => state.to_s, :description => about[info.index(haunt)].to_s }
             
           end
         end
@@ -123,9 +123,6 @@ def final_haunt_hash # creates a hash of every state and their haunts
 
   hash
 end
-
-return final_haunt_hash
-
 
 
 
