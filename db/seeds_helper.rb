@@ -124,9 +124,6 @@ def final_haunt_hash # creates a hash of every state and their haunts
   hash
 end
 
-return final_haunt_hash
-
-
 
 
 
