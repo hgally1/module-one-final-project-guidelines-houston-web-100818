@@ -27,11 +27,11 @@ end
 
 
 
-def self.auditory_haunting
-    auditory = ["disembodied", "voice", "scream", "growl", "footsteps", "knocking", "cries", "giggling", "laughing", "moaning", "unexplained sounds"]
-    auditory.each do |activity|
-        if self.description.include? "#{activity}"
-            puts "#{self.name} reportedly has the following activity: #{activity}"
-        end
-    end
-end
+# def self.auditory_haunting
+#     auditory = ["disembodied", "voice", "scream", "growl", "footsteps", "knocking", "cries", "giggling", "laughing", "moaning", "unexplained sounds"]
+#     auditory.each do |activity|
+#         if self.description.include? "#{activity}"
+#             puts "#{self.name} reportedly has the following activity: #{activity}"
+#         end
+#     end
+# end

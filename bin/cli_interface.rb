@@ -1,34 +1,26 @@
 require_relative '../config/environment'
+require 'tty-prompt'
 
 $prompt = TTY::Prompt.new
 
 $start_menu_choices = {
   "Search haunts by name" => 0,
-  "Search haunts by location" => 1, #update location to STATE
-  "Search haunts by type of haunting" => 2, # maybe change to type of experience or thrill
-  # i also want user to be able to search for haunted accomodations exp: hotel or B&B (Will need to possibly build another scraper to itterate through the haunted accomodation page)
+  "Search haunts by location" => 1, 
+  "Search haunts by type of haunting" => 2,
   "Exit" => 3
 }
 
-#$location_menu_choices = {
- # "Choose a location" => 0,
-  #"Write your own location" => 1,
-  #"Back" => 2
-#}
-
-# v aybe change to type of experience or thrill
-$type_of_haunting_menu_choices = { #Will need to make array of the thrill options containing descriptive keywords (that will be used to itterate through haunt descriptions and return matching haunts)
+$type_of_haunting_menu_choices = { 
   "Visual" => 1,
-  #"Intelligent" => 2, remove
-  "Physical" => 3,
-  "Auditory" => 4,
-  "Back" => 5
+  "Physical" => 2,
+  "Auditory" => 3,
+  "Back" => 4
 }
 
 def messages(name=nil)
     {
       start: "Pick your haunt: ",
-      location: "Where would you like to be scared? ", #update location to STATE
+      location: "Where would you like to be scared? ",
       type_of_haunting: "What kind of experience are you looking for? ",
       move_on: "#{name}, are you ready to be scared!? ",
       move_on_again: "Are you sure you can handle it?",
@@ -37,7 +29,8 @@ def messages(name=nil)
       welcome: "Welcome to the Haunt. What's your name?",
       input_error: "Sorry, please try again.",
       exit: "Scaredy Cat!",
-      haunt_search: "Enter the name of the haunted place you're looking: "
+      haunt_search: "Enter the name of the haunted place you're looking: ",
+      location_search: "Enter the name of state you would like to explore: "
     }
   end
 
@@ -87,7 +80,7 @@ def response_choices
   
     case start_choice
     when 0
-      bar_name = $prompt.select(messages[:haunt_search], filter: true) do |options|
+      haunt_name = $prompt.select(messages[:haunt_search], filter: true) do |options|
         Haunt.all.collect do |haunt|
           options.choice haunt.name
         end
@@ -101,7 +94,7 @@ def response_choices
           options.choice haunt.location
         end
       end
-      location_choice = Haunt.find_by(location: location_name).haunts.order("location") #update location to STATE
+      location_choice = Haunt.find_by(location: location_name).haunts.order("name") 
       location_search_printer(location_name)
       launch_first_menu
     when 2
@@ -113,38 +106,62 @@ def response_choices
   end
 
 
-  def launch_type_of_haunting_menu(type_of_haunting_choice)
-      case type_of_haunting_choice
-      when 0
-        visual_haunting_printer(Paranormal_Experience.visual_haunting) #need to be able to use key words from array to search through descriptions and return :name :location: and full description.
-        launch_first_menu
-      when 1
-        auditory_haunting_printer(Paranormal_Experience.auditory_haunting)
-        launch_first_menu
-      when 2
-        physical_haunting_printer(Paranormal_Experience.physical_haunting)
-        launch_first_menu
-      when 3
-        launch_first_menu
-      end
+  # def launch_type_of_haunting_menu(type_of_haunting_choice)
+  #     case type_of_haunting_choice
+  #     when 0
+  #       visual_type = $prompt.select(messages[:type_of_haunting], filter: true) do |options|
+  #         Paranormal_Experience.all.collect do |description|
+  #           description.each do |word|
+  #             if word.includes?("orbs") || word.includes?("shadow") || word.includes?("figure") || word.includes?("lights") || word.includes?("items moving") || word.includes?("apparition")
+  #               options.choice visual.description
+  #        # Haunt.all.collect do |description|
+  #         #  options.choice description.visual
+  #             end
+  #           end
+      
+  #       visual_choice = Paranormal_Experience.find_by(description: visual_type).haunts.order("name")
+  #       visual_haunting_printer(visual_type) 
+  #       launch_first_menu
+  #     when 1
+  #       auditory_haunting_printer(Paranormal_Experience.type_of_haunting_hash)
+  #       launch_first_menu
+  #     when 2
+  #       physical_haunting_printer(Paranormal_Experience.type_of_haunting_hash)
+  #       launch_first_menu
+  #     when 3
+  #       launch_first_menu
+  #     end
 
-  end
+  # end
 
-  def haunt_search_printer(name, description_array)
+  # def physical_haunting_printer(type_of_haunting_hash)
+  #     type_of_haunting_hash.each do | physical |
+  #       message = "\nName: #{haunt[:name]}\nPlace: #{haunt[:state]}\nReview:\n#{review[:review]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+  #       review_printer(message)
+  #     end
+  # end
+
+  # def auditory_haunting_printer
+  # end
+  # def visual_haunting_printer
+  # end
+
+  def haunt_search_printer(name, location, final_haunt_hash)
     puts "\nHaunt: #{name}"
+    puts "\nPlace: #{location}"
     puts "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-    description_array.each do |description|
-      message = "\nDescription:\n#{description[:content]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+    final_haunt_hash.each do |description|
+      message = "\nDescription:\n#{description[:description]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
       review_printer(message)
     end
   end
   
-  def location_search_printer(name, location, description_array)
+  def location_search_printer(name, location, final_haunt_hash)
     puts "\nHaunt: #{name}"
     puts "\nPlace: #{location}"
     puts "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-    description_array.each do |description|
-      message = "\nDescription:\n#{description[:content]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+    final_haunt_hash.each do |description|
+      message = "\nDescription:\n#{description[:description]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
       review_printer(message)
     end
   end
@@ -167,3 +184,5 @@ def response_choices
       launch_first_menu(name)
     end
   end
+
+
