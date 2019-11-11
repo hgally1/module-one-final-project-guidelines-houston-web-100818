@@ -7,3 +7,6 @@ gem "pry"
 gem "require_all"
 gem 'nokogiri'
 
+#gem "json"
+#gem "hash_dot"
+gem 'tty-prompt'

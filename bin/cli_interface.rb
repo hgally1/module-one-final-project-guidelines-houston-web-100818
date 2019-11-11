@@ -1,4 +1,5 @@
 require_relative '../config/environment'
+require 'tty-prompt'
 
 $prompt = TTY::Prompt.new
 
@@ -105,45 +106,45 @@ def response_choices
   end
 
 
-  def launch_type_of_haunting_menu(type_of_haunting_choice)
-      case type_of_haunting_choice
-      when 0
-        visual_type = $prompt.select(messages[:type_of_haunting], filter: true) do |options|
-          Paranormal_Experience.all.collect do |description|
-            description.each do |word|
-              if word.includes?("orbs") || word.includes?("shadow") || word.includes?("figure") || word.includes?("lights") || word.includes?("items moving") || word.includes?("apparition")
-            options.choice visual.description
-         # Haunt.all.collect do |description|
-          #  options.choice description.visual
-          end
-        end
-        visual_choice = Paranormal_Experience.find_by(description: visual_type).haunts.order("name")
-        visual_haunting_printer(visual_type) 
-        launch_first_menu
-      when 1
-        auditory_haunting_printer(Paranormal_Experience.type_of_haunting_hash)
-        launch_first_menu
-      when 2
-        physical_haunting_printer(Paranormal_Experience.type_of_haunting_hash)
-        launch_first_menu
-      when 3
-        launch_first_menu
-      end
+  # def launch_type_of_haunting_menu(type_of_haunting_choice)
+  #     case type_of_haunting_choice
+  #     when 0
+  #       visual_type = $prompt.select(messages[:type_of_haunting], filter: true) do |options|
+  #         Paranormal_Experience.all.collect do |description|
+  #           description.each do |word|
+  #             if word.includes?("orbs") || word.includes?("shadow") || word.includes?("figure") || word.includes?("lights") || word.includes?("items moving") || word.includes?("apparition")
+  #               options.choice visual.description
+  #        # Haunt.all.collect do |description|
+  #         #  options.choice description.visual
+  #             end
+  #           end
+      
+  #       visual_choice = Paranormal_Experience.find_by(description: visual_type).haunts.order("name")
+  #       visual_haunting_printer(visual_type) 
+  #       launch_first_menu
+  #     when 1
+  #       auditory_haunting_printer(Paranormal_Experience.type_of_haunting_hash)
+  #       launch_first_menu
+  #     when 2
+  #       physical_haunting_printer(Paranormal_Experience.type_of_haunting_hash)
+  #       launch_first_menu
+  #     when 3
+  #       launch_first_menu
+  #     end
 
-  end
+  # end
 
-  def physical_haunting_printer(type_of_haunting_hash)
-      type_of_haunting_hash.each do | physical |
-        message = "\nName: #{haunt[:name]}\nPlace: #{haunt[:state]}\nReview:\n#{review[:review]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-        review_printer(message)
-      end
-    end
-  end
+  # def physical_haunting_printer(type_of_haunting_hash)
+  #     type_of_haunting_hash.each do | physical |
+  #       message = "\nName: #{haunt[:name]}\nPlace: #{haunt[:state]}\nReview:\n#{review[:review]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+  #       review_printer(message)
+  #     end
+  # end
 
-  def auditory_haunting_printer
-  end
-  def visual_haunting_printer
-  end
+  # def auditory_haunting_printer
+  # end
+  # def visual_haunting_printer
+  # end
 
   def haunt_search_printer(name, location, final_haunt_hash)
     puts "\nHaunt: #{name}"
@@ -183,3 +184,5 @@ def response_choices
       launch_first_menu(name)
     end
   end
+
+
