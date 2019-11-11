@@ -34,10 +34,13 @@ class Paranormal_Experience < ActiveRecord::Base
         end
         arr
     end
-                
+        
+        
+
+
 
   
-    def self.auditory_haunting_array
+    def self.auditory
         arr = []
         auditory = ["disembodied", "voice", "scream", "growl", "footsteps", "knocking", "cries", "giggling", "laughing", "moaning", "unexplained sounds"]
         auditory.each do |activity|
