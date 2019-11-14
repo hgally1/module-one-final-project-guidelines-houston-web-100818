@@ -2,21 +2,6 @@ require_relative 'seeds_helper'
 require_relative '../config/environment'
 #require 'hash_dot'
 
-# haunt_hash = final_haunt_hash["Alabama"]
-# haunt_hash.each do |state|
-#   state.each do |haunter|
-#     Haunt.find_or_create_by(
-#       name: haunter["name"],
-#       city: haunter["city"],
-#       state: haunter["state"],
-#       description: haunter["description"]
-#     )
-#   end
-# end
-
-# states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Connecticut", "Delaware", "Distric of Colombia"] 
-
-
 def state_arr # puts states into an array
     arr = []
     href_arr.each do |state_href|
@@ -116,6 +101,14 @@ href_arr.each do |state_href|
     end
 end
 
+href_arr.each do |state_href|
+    href = "#{state_href}"
+    haunt_hasher("#{state_href}").each do |one, two|
+        two.each do |hash|
+            Paranormal_Experience.find_or_create_by({ })
+        end
+    end
+end
 
 
 #     end
