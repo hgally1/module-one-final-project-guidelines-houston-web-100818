@@ -44,7 +44,7 @@ def response_choices
   end
 
   def welcome_get_name
-    name = $prompt.ask(messages[:welcome]) do |q|
+    name = $prompt.ask(messages[:welcome], default: 'Anonymous') do |q|
       q.required true
       q.validate /\A\w+\Z/
       q.modify   :capitalize
@@ -75,38 +75,36 @@ def response_choices
     $prompt.select(message, menu_choice)
   end
 
-  def find_by_state(input)
-    input = gets.chomp
   
-  def launch_first_menu(name=nil)
-    start_choice = launch_menu($start_menu_choices, messages(name)[:start])
-  
-    case start_choice
-    when 0
-      haunt_name = $prompt.select(messages[:haunt_search], filter: true) do |options|
-        Haunt.all.collect do |haunt|
-          options.choice haunt.name
-        end
+def launch_first_menu(name=nil)
+  start_choice = launch_menu($start_menu_choices, messages(name)[:start])
+
+  case start_choice
+  when 0
+    haunt_name = $prompt.select(messages[:haunt_search], filter: true) do |options|
+      Haunt.all.collect do |haunt|
+        options.choice haunt.name
       end
-      haunt_choice = Haunt.find_by(name: haunt_name).haunts.order("name")
-      haunt_search_printer(haunt_name)
-      launch_first_menu
-    when 1
-      location_name = $prompt.select(messages[:location_search], filter: true) do |options|
-        Haunt.all.collect do |state|
-          options.choice state.name
-        end
-      end
-      location_choice = find_by_state(input)
-      location_search_printer(location_name)
-      launch_first_menu
-    when 2
-      type_of_haunting_choice = launch_menu($type_of_haunting_menu_choices, messages[:type_of_haunting])
-      launch_type_of_haunting_menu(type_of_haunting_choice)
-    when 3
-      exit
     end
+    haunt_choice = Haunt.find_by(name: haunt_name).haunts.order("name")
+    haunt_search_printer(haunt_name)
+    launch_first_menu
+  when 1
+    location_name = $prompt.select(messages[:location_search], filter: true) do |options|
+      Haunt.all.collect do |state|
+        options.choice state.name
+      end
+    end
+    location_choice = find_by_state(input)
+    location_search_printer(location_name)
+    launch_first_menu
+  when 2
+    type_of_haunting_choice = launch_menu($type_of_haunting_menu_choices, messages[:type_of_haunting])
+    launch_type_of_haunting_menu(type_of_haunting_choice)
+  when 3
+    exit
   end
+end
 
 
   # def launch_type_of_haunting_menu(type_of_haunting_choice)
@@ -149,40 +147,43 @@ def response_choices
   # def visual_haunting_printer
   # end
 
-  def haunt_search_printer(name)
-    puts "\nHaunt: #{name}"
-    Haunt.each do |haunt|
-      message = "\nCity:\n#{haunt.city},\nState:\n#{haunt.state},\nDescription:\n#{haunt.description}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-      review_printer(message)
-    end
+def haunt_search_printer(name)
+  puts "\nHaunt: #{name}"
+  Haunt.each do |haunt|
+    message = "\nCity:\n#{haunt.city},\nState:\n#{haunt.state},\nDescription:\n#{haunt.description}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+    review_printer(message)
   end
-  
-  def location_search_printer(state)
-    puts "\nState: #{state}"
-    puts "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-    Haunt.each do |haunt|
-      message = "\nName:\n#{haunt.name},\nCity:\n#{haunt.city},\nDescription:\n#{haunt.description}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-      review_printer(message)
-    end
-  end
-
-  def review_printer(message)
-    next_or_back = $prompt.select(message, response_choices[:next_or_back_choices])
-    if next_or_back == "Back"
-      launch_first_menu
-    end
-  end
-  
-  def run_program
-    name = welcome_get_name
-    yes_or_no = move_on(name)
-  
-    if yes_or_no == "No"
-      exit?
-    else
-      name = continue_message
-      launch_first_menu(name)
-    end
-  end
-  
 end
+
+def location_search_printer(state)
+  puts "\nState: #{state}"
+  puts "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+  Haunt.each do |haunt|
+    message = "\nName:\n#{haunt.name},\nCity:\n#{haunt.city},\nDescription:\n#{haunt.description}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+    review_printer(message)
+  end
+end
+
+def review_printer(message)
+  next_or_back = $prompt.select(message, response_choices[:next_or_back_choices])
+  if next_or_back == "Back"
+    launch_first_menu
+  end
+end
+
+
+
+
+def run_program
+  name = welcome_get_name
+  yes_or_no = move_on(name)
+
+  if yes_or_no == "No"
+    exit?
+  else
+    name = continue_message
+    launch_first_menu(name)
+  end
+end
+  
+
