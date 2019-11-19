@@ -46,6 +46,7 @@ class Paranormal_Experience < ActiveRecord::Base
             
 
 
+
     def self.visual_haunting_array
         arr = []
         visual = ["orbs", "shadow", "figure", "lights", "items moving", "apparition"]
@@ -56,10 +57,10 @@ class Paranormal_Experience < ActiveRecord::Base
         end
         arr
     end
-                
-
+        
+        
   
-    def self.auditory_haunting_array
+    def self.auditory
         arr = []
         auditory = ["disembodied", "voice", "scream", "growl", "footsteps", "knocking", "cries", "giggling", "laughing", "moaning", "unexplained sounds"]
         auditory.each do |activity|
@@ -71,14 +72,14 @@ class Paranormal_Experience < ActiveRecord::Base
     end
         
     def self.physical_haunting_array
-      arr = []
-      physical = ["thrown item", "cold spot", "poltergeist", "touch", "scratch", "possess"]
-      physical.each do |activity|
-        if Haunt.description.include? "#{activity}"
-            arr << self
+        arr = []
+        physical = ["thrown item", "cold spot", "poltergeist", "touch", "scratch", "possess"]
+        physical.each do |activity|
+            if Haunt.description.include? "#{activity}"
+                arr << self
+            end
         end
-    puts arr
-    end
     end
   
 end
+
