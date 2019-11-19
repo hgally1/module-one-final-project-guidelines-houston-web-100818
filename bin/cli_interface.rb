@@ -28,7 +28,7 @@ def messages(name=nil)
       continue_message2: "Let's get scared! ",
       welcome: "Welcome to the Haunt. What's your name?",
       input_error: "Sorry, please try again.",
-      exit: "Scaredy Cat!",
+      exit: "OK, Scaredy Cat! Goodbye!",
       haunt_search: "Enter the name of the haunted place you're looking: ",
       location_search: "Enter the name of state you would like to explore: "
     }
@@ -74,6 +74,9 @@ def response_choices
   def launch_menu(menu_choice, message)
     $prompt.select(message, menu_choice)
   end
+
+  def find_by_state(input)
+    input = gets.chomp
   
   def launch_first_menu(name=nil)
     start_choice = launch_menu($start_menu_choices, messages(name)[:start])
@@ -90,11 +93,11 @@ def response_choices
       launch_first_menu
     when 1
       location_name = $prompt.select(messages[:location_search], filter: true) do |options|
-        Haunt.all.collect do |location|
-          options.choice haunt.location
+        Haunt.all.collect do |state|
+          options.choice state.name
         end
       end
-      location_choice = Haunt.find_by(location: location_name).haunts.order("name") 
+      location_choice = find_by_state(input)
       location_search_printer(location_name)
       launch_first_menu
     when 2
@@ -146,22 +149,19 @@ def response_choices
   # def visual_haunting_printer
   # end
 
-  def haunt_search_printer(name, location, final_haunt_hash)
+  def haunt_search_printer(name)
     puts "\nHaunt: #{name}"
-    puts "\nPlace: #{location}"
-    puts "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-    final_haunt_hash.each do |description|
-      message = "\nDescription:\n#{description[:description]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+    Haunt.each do |haunt|
+      message = "\nCity:\n#{haunt.city},\nState:\n#{haunt.state},\nDescription:\n#{haunt.description}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
       review_printer(message)
     end
   end
   
-  def location_search_printer(name, location, final_haunt_hash)
-    puts "\nHaunt: #{name}"
-    puts "\nPlace: #{location}"
+  def location_search_printer(state)
+    puts "\nState: #{state}"
     puts "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-    final_haunt_hash.each do |description|
-      message = "\nDescription:\n#{description[:description]}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+    Haunt.each do |haunt|
+      message = "\nName:\n#{haunt.name},\nCity:\n#{haunt.city},\nDescription:\n#{haunt.description}\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
       review_printer(message)
     end
   end
@@ -184,5 +184,5 @@ def response_choices
       launch_first_menu(name)
     end
   end
-
-
+  
+end

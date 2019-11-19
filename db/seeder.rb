@@ -1,6 +1,7 @@
 require_relative 'seeds_helper'
 require_relative '../config/environment'
 
+
 def state_arr # puts states into an array
     arr = []
     href_arr.each do |state_href|
@@ -25,6 +26,14 @@ href_arr.each do |state_href|
     end
 end
 
+href_arr.each do |state_href|
+    href = "#{state_href}"
+    haunt_hasher("#{state_href}").each do |one, two|
+        two.each do |hash|
+            Paranormal_Experience.find_or_create_by({ })
+        end
+    end
+end
 
 
 # def self.auditory_haunting
